@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "ES2023",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strictBindCallApply": false,
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@types": ["@types/index.ts"],
+      "@configs": ["configs/index.ts"],
+      "@domains": ["domains/index.ts"],
+      "@utils": ["utils/index.ts"],
+      "@middlewares": ["middlewares/index.ts"],
+      "@infrastructures/*": ["infrastructures/*"],
+      "@presentations/*": ["presentations/*"],
+      "@use-cases/*": ["use-cases/*"]
+    }
+  }
+}
