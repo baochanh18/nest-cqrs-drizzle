@@ -5,8 +5,29 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1749624930482,
-      "tag": "0000_init",
+      "when": 1749633452892,
+      "tag": "0000_CreateUsersTable",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1749634090855,
+      "tag": "0001_CreatePostsTable",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1749634763271,
+      "tag": "0002_CreateGroupsTable",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1749635808919,
+      "tag": "0003_CreateUserGroupRelationsTable",
       "breakpoints": true
     }
   ]

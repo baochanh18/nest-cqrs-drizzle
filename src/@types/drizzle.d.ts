@@ -1,4 +1,4 @@
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
-import * as schema from '../infrastructures/rdb/schemas';
+import * as schema from '~rdb/schema';
 
-declare type DrizzleDB = NodePgDatabase<typeof schema>;
+export type DrizzleDB = NodePgDatabase<typeof schema>;

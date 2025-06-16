@@ -18,14 +18,17 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@types": ["@types/index.ts"],
-      "@configs": ["configs/index.ts"],
-      "@domains": ["domains/index.ts"],
-      "@utils": ["utils/index.ts"],
-      "@middlewares": ["middlewares/index.ts"],
-      "@infrastructures/*": ["infrastructures/*"],
-      "@presentations/*": ["presentations/*"],
-      "@use-cases/*": ["use-cases/*"]
+      "~@types": ["@types/index.ts"],
+      "~@third-party-modules": ["@third-party-modules/index.ts"],
+      "~configs": ["configs/index.ts"],
+      "~domains/aggregates": ["domains/aggregates/index.ts"],
+      "~domains/repositories": ["domains/repositories/index.ts"],
+      "~domains/factories": ["domains/factories/index.ts"],
+      "~utils": ["utils/index.ts"],
+      "~middlewares": ["middlewares/index.ts"],
+      "~rdb/schema": ["infrastructures/rdb/schemas/index.ts"],
+      "~presentations/*": ["presentations/*"],
+      "~use-cases/*": ["use-cases/*"]
     }
   }
 }
