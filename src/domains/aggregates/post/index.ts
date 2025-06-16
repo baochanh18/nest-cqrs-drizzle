@@ -1,5 +1,5 @@
 import { Expose } from 'class-transformer';
-import BaseAggregate from '../base';
+import { BaseAggregate } from '../base';
 
 export class PostAggregate extends BaseAggregate {
   @Expose()

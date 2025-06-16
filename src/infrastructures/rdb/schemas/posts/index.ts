@@ -1,6 +1,5 @@
 import { relations } from 'drizzle-orm';
 import { integer, pgTable, varchar } from 'drizzle-orm/pg-core';
-import { createSelectSchema } from 'drizzle-zod';
 import { baseTableColumns } from '../base';
 import { users } from '../users';
 
@@ -19,5 +18,3 @@ export const postRelations = relations(posts, ({ one }) => ({
     references: [users.id],
   }),
 }));
-
-export const postSchema = createSelectSchema(posts);

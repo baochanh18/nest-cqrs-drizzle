@@ -1,11 +1,9 @@
 import { relations } from 'drizzle-orm';
 import { integer, pgTable, varchar } from 'drizzle-orm/pg-core';
-import { createSelectSchema } from 'drizzle-zod';
 import { baseTableColumns } from '../base';
-import { groups, groupSchema } from '../groups';
-import { posts, postSchema } from '../posts';
+import { groups } from '../groups';
+import { posts } from '../posts';
 
-export * from './type';
 export const users = pgTable('users', {
   ...baseTableColumns(),
   name: varchar({ length: 255 }).notNull(),
@@ -34,9 +32,3 @@ export const userGroupRelations = relations(userGroups, ({ one }) => ({
     references: [groups.id],
   }),
 }));
-
-export const userSchema = createSelectSchema(users);
-export const userSchemaWithRelations = userSchema.extend({
-  groups: groupSchema.array().optional(),
-  posts: postSchema.array().optional(),
-});

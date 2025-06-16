@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { DRIZZLE } from '~@third-party-modules';
 import { DrizzleDB } from '~@types';
@@ -11,6 +11,7 @@ import {
 } from '~domains/repositories';
 import { users } from '~rdb/schema';
 
+@Injectable()
 export class UserRepositoryImplement implements UserRepository {
   @Inject(DRIZZLE) private readonly db: DrizzleDB;
   @Inject() private readonly userFactory: UserFactory;

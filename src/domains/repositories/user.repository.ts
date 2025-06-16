@@ -2,16 +2,16 @@ import { DrizzleDB } from '~@types';
 import { UserAggregate } from '~domains/aggregates';
 
 export type FindByIdPayload = {
-  transaction: DrizzleDB | null;
+  transaction?: DrizzleDB;
   id: number;
 };
 export type SavePayload = {
-  transaction: DrizzleDB | null;
+  transaction?: DrizzleDB;
   user: UserAggregate;
 };
 
 export type DeleteByIdPayload = {
-  transaction: DrizzleDB | null;
+  transaction?: DrizzleDB;
   user: UserAggregate;
 };
 

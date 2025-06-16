@@ -1,5 +1,5 @@
 import { Expose, Type } from 'class-transformer';
-import BaseAggregate from '../base';
+import { BaseAggregate } from '../base';
 import { PostAggregate } from '../post';
 
 export class UserAggregate extends BaseAggregate {
