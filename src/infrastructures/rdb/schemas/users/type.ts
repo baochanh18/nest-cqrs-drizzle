@@ -1,5 +1,5 @@
 import { createSelectSchema } from 'drizzle-zod';
-import z from 'zod/v4';
+import type z from 'zod/v4';
 import { users } from '.';
 import { groupSchema } from '../groups/type';
 import { postSchema } from '../posts/type';

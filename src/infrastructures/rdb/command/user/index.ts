@@ -1,7 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { eq } from 'drizzle-orm';
+import { eq as equal } from 'drizzle-orm';
 import { DRIZZLE } from '~@third-party-modules';
 import { DrizzleDB } from '~@types';
+import { UserAggregate } from '~domains/aggregates';
 import { UserFactory } from '~domains/factories';
 import {
   DeleteByIdPayload,
@@ -16,12 +17,14 @@ export class UserRepositoryImplement implements UserRepository {
   @Inject(DRIZZLE) private readonly db: DrizzleDB;
   @Inject() private readonly userFactory: UserFactory;
 
-  async findById(payload: FindByIdPayload) {
+  public async findById(
+    payload: FindByIdPayload,
+  ): Promise<UserAggregate | null> {
     const { transaction, id } = payload;
-    const db = transaction || this.db;
+    const db = transaction ?? this.db;
 
     const queryResult = await db.query.users.findFirst({
-      where: (users, { eq }) => eq(users.id, id),
+      where: (user, { eq }) => eq(user.id, id),
       with: {
         posts: true,
       },
@@ -30,9 +33,9 @@ export class UserRepositoryImplement implements UserRepository {
     return queryResult ? this.userFactory.createAggregate(queryResult) : null;
   }
 
-  async save(payload: SavePayload) {
+  public async save(payload: SavePayload): Promise<UserAggregate> {
     const { transaction, user } = payload;
-    const db = transaction || this.db;
+    const db = transaction ?? this.db;
 
     const userEntity = this.userFactory.createEntity(user);
 
@@ -42,17 +45,17 @@ export class UserRepositoryImplement implements UserRepository {
       .onConflictDoUpdate({ target: users.id, set: userEntity })
       .returning();
 
-    return this.userFactory.createAggregate(result[0]);
+    return this.userFactory.createAggregate(result.pop() ?? {});
   }
 
-  async deleteById(payload: DeleteByIdPayload) {
+  public async deleteById(payload: DeleteByIdPayload): Promise<void> {
     const { transaction, user } = payload;
-    const db = transaction || this.db;
+    const db = transaction ?? this.db;
 
     const userId = user.getId();
-    if (!userId) {
+    if (userId === null || userId === undefined || Number.isNaN(userId)) {
       throw new Error('User id is required for deletion');
     }
-    await db.delete(users).where(eq(users.id, userId));
+    await db.delete(users).where(equal(users.id, userId));
   }
 }

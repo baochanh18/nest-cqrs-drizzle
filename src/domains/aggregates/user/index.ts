@@ -16,7 +16,7 @@ export class UserAggregate extends BaseAggregate {
   @Type(() => PostAggregate)
   public readonly posts?: PostAggregate[];
 
-  public getId() {
+  public getId(): number | null | undefined {
     return this.id;
   }
 }

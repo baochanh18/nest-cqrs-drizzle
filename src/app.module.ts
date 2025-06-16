@@ -10,7 +10,7 @@ import { UserRepositoryImplement } from '~rdb/command';
 
 const repositories: Provider[] = [
   {
-    provide: InjectionToken.USER_COMMAND_REPOSITORY,
+    provide: InjectionToken.userCommandRepository,
     useClass: UserRepositoryImplement,
   },
 ];

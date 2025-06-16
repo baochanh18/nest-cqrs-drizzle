@@ -4,7 +4,7 @@ import { baseTableColumns } from '../base';
 import { userGroups } from '../users';
 
 export const groups = pgTable('groups', {
-  ...baseTableColumns(),
+  ...baseTableColumns,
   name: varchar({ length: 255 }).notNull(),
 });
 

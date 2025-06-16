@@ -5,10 +5,20 @@ import { groups } from '../groups';
 import { posts } from '../posts';
 
 export const users = pgTable('users', {
-  ...baseTableColumns(),
+  ...baseTableColumns,
   name: varchar({ length: 255 }).notNull(),
   email: varchar({ length: 255 }).notNull().unique(),
   password: varchar({ length: 255 }).notNull(),
+});
+
+export const userGroups = pgTable('user_group_relations', {
+  ...baseTableColumns,
+  userId: integer('user_id').references(() => users.id, {
+    onDelete: 'cascade',
+  }),
+  groupId: integer('group_id').references(() => groups.id, {
+    onDelete: 'cascade',
+  }),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -16,19 +26,13 @@ export const usersRelations = relations(users, ({ many }) => ({
   groups: many(userGroups),
 }));
 
-export const userGroups = pgTable('user_group_relations', {
-  ...baseTableColumns(),
-  user_id: integer().references(() => users.id, { onDelete: 'cascade' }),
-  group_id: integer().references(() => groups.id, { onDelete: 'cascade' }),
-});
-
 export const userGroupRelations = relations(userGroups, ({ one }) => ({
   user: one(users, {
-    fields: [userGroups.user_id],
+    fields: [userGroups.userId],
     references: [users.id],
   }),
   group: one(groups, {
-    fields: [userGroups.group_id],
+    fields: [userGroups.groupId],
     references: [groups.id],
   }),
 }));

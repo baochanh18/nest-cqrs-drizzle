@@ -1,22 +1,22 @@
-import { DrizzleDB } from '~@types';
-import { UserAggregate } from '~domains/aggregates';
+import type { DrizzleDB } from '~@types';
+import type { UserAggregate } from '~domains/aggregates';
 
-export type FindByIdPayload = {
+export interface FindByIdPayload {
   transaction?: DrizzleDB;
   id: number;
-};
-export type SavePayload = {
+}
+export interface SavePayload {
   transaction?: DrizzleDB;
   user: UserAggregate;
-};
+}
 
-export type DeleteByIdPayload = {
+export interface DeleteByIdPayload {
   transaction?: DrizzleDB;
   user: UserAggregate;
-};
+}
 
 export interface UserRepository {
-  findById(payload: FindByIdPayload): Promise<UserAggregate | null>;
-  save(payload: SavePayload): Promise<UserAggregate>;
-  deleteById(payload: DeleteByIdPayload): Promise<void>;
+  findById: (payload: FindByIdPayload) => Promise<UserAggregate | null>;
+  save: (payload: SavePayload) => Promise<UserAggregate>;
+  deleteById: (payload: DeleteByIdPayload) => Promise<void>;
 }

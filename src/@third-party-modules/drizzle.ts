@@ -11,15 +11,17 @@ export const DRIZZLE = Symbol('drizzle-connection');
     {
       provide: DRIZZLE,
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
-        const host = configService.get<string>('PG_HOST') || 'localhost';
+      useFactory: (
+        configService: ConfigService,
+      ): NodePgDatabase<typeof schema> => {
+        const host = configService.get<string>('PG_HOST') ?? 'localhost';
         const port = parseInt(
-          configService.get<string>('PG_PORT') || '5432',
+          configService.get<string>('PG_PORT') ?? '5432',
           10,
         );
-        const user = configService.get<string>('PG_USER') || 'postgres';
-        const password = configService.get<string>('PG_PASSWORD') || 'password';
-        const database = configService.get<string>('PG_NAME') || 'account';
+        const user = configService.get<string>('PG_USER') ?? 'postgres';
+        const password = configService.get<string>('PG_PASSWORD') ?? 'password';
+        const database = configService.get<string>('PG_NAME') ?? 'account';
 
         const pool = new Pool({
           connectionString: `postgresql://${user}:${password}@${host}:${port}/${database}`,

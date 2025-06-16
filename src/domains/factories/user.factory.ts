@@ -9,12 +9,12 @@ import { IBaseFactory } from './base.factory';
 export class UserFactory implements IBaseFactory<UserAggregate, UserEntity> {
   @Inject(EventPublisher) private readonly eventPublisher: EventPublisher;
 
-  createAggregate(plainObject: Partial<UserEntity>) {
+  public createAggregate(plainObject: Partial<UserEntity>): UserAggregate {
     const userAggregate = plainToInstance(UserAggregate, plainObject);
     return this.eventPublisher.mergeObjectContext(userAggregate);
   }
 
-  createEntity(plainObject: UserAggregate) {
+  public createEntity(plainObject: UserAggregate): UserEntity {
     return userSchema.parse(plainObject);
   }
 }
