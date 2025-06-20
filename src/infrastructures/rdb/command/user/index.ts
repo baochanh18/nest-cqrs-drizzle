@@ -37,7 +37,7 @@ export class UserRepositoryImplement implements UserRepository {
     const { transaction, user } = payload;
     const db = transaction ?? this.db;
 
-    const userEntity = this.userFactory.createEntity(user);
+    const userEntity = this.userFactory.createInsertEntity(user);
 
     const result = await db
       .insert(users)

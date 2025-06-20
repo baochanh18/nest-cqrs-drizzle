@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm';
-import { integer, pgTable, varchar } from 'drizzle-orm/pg-core';
+import { integer, pgTable, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { baseTableColumns } from '../base';
 import { groups } from '../groups';
 import { posts } from '../posts';
@@ -11,15 +11,19 @@ export const users = pgTable('users', {
   password: varchar({ length: 255 }).notNull(),
 });
 
-export const userGroups = pgTable('user_group_relations', {
-  ...baseTableColumns,
-  userId: integer('user_id').references(() => users.id, {
-    onDelete: 'cascade',
-  }),
-  groupId: integer('group_id').references(() => groups.id, {
-    onDelete: 'cascade',
-  }),
-});
+export const userGroups = pgTable(
+  'user_group_relations',
+  {
+    ...baseTableColumns,
+    userId: integer('user_id').references(() => users.id, {
+      onDelete: 'cascade',
+    }),
+    groupId: integer('group_id').references(() => groups.id, {
+      onDelete: 'cascade',
+    }),
+  },
+  (table) => [uniqueIndex('user_group_index').on(table.userId, table.groupId)],
+);
 
 export const usersRelations = relations(users, ({ many }) => ({
   posts: many(posts),

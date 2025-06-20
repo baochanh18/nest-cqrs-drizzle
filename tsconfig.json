@@ -28,8 +28,8 @@
       "~middlewares": ["middlewares/index"],
       "~rdb/schema": ["infrastructures/rdb/schemas/index"],
       "~rdb/command": ["infrastructures/rdb/command/index"],
-      "~presentations/*": ["presentations/*"],
-      "~use-cases/*": ["use-cases/*"]
+      "~presentations/http": ["presentations/http/index"],
+      "~use-cases": ["use-cases/index"]
     }
   }
 }
