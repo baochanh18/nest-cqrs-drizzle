@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
+import { PinoLogger } from 'nestjs-pino';
 import { Pool } from 'pg';
 import * as schema from '~rdb/schema';
 
@@ -10,9 +11,10 @@ export const DRIZZLE = Symbol('drizzle-connection');
   providers: [
     {
       provide: DRIZZLE,
-      inject: [ConfigService],
+      inject: [ConfigService, PinoLogger],
       useFactory: (
         configService: ConfigService,
+        logger: PinoLogger,
       ): NodePgDatabase<typeof schema> => {
         const host = configService.get<string>('PG_HOST') ?? 'localhost';
         const port = parseInt(
@@ -28,7 +30,19 @@ export const DRIZZLE = Symbol('drizzle-connection');
           ssl: false,
         });
 
-        return drizzle(pool, { schema }) as NodePgDatabase<typeof schema>;
+        return drizzle(pool, {
+          schema,
+          logger: {
+            logQuery: (query, params) => {
+              logger.info(
+                'SQL Query:' +
+                  query +
+                  '\nParameters: ' +
+                  JSON.stringify(params),
+              );
+            },
+          },
+        }) as NodePgDatabase<typeof schema>;
       },
     },
   ],

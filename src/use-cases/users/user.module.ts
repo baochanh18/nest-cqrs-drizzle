@@ -1,5 +1,6 @@
 import { Module, Provider } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
+import { LoggerModule } from '@third-party-modules/logger';
 import { DrizzleModule } from '~@third-party-modules';
 import { InjectionToken } from '~configs';
 import { UserFactory } from '~domains/factories';
@@ -18,7 +19,7 @@ const repositories: Provider[] = [
 ];
 
 @Module({
-  imports: [DrizzleModule, CqrsModule],
+  imports: [DrizzleModule, CqrsModule, LoggerModule],
   controllers: [UserController],
   providers: [...commands, ...repositories, ...factories],
 })
