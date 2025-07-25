@@ -7,13 +7,27 @@ export const CreateUserSchema = zodJP.object({
   password: zodJP.string().min(6),
 });
 
-export class CreateUserDto {
-  @ApiProperty()
+export type CreateUserDto = zodJP.infer<typeof CreateUserSchema>;
+
+export class CreateUserSwaggerDto {
+  @ApiProperty({
+    description: 'ユーザー名',
+    example: 'John Doe',
+    minLength: 1,
+  })
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'メールアドレス',
+    example: 'john@example.com',
+    format: 'email',
+  })
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'パスワード',
+    example: 'password123',
+    minLength: 6,
+  })
   password: string;
 }

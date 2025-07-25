@@ -1,13 +1,19 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UsePipes } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   ApiBadRequestResponse,
+  ApiBody,
   ApiInternalServerErrorResponse,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { ZodValidationPipe } from '@third-party-modules';
 import { CreateUserCommand } from '~use-cases';
-import { CreateUserDto, CreateUserSchema } from './dto/create-user';
+import {
+  CreateUserDto,
+  CreateUserSchema,
+  CreateUserSwaggerDto,
+} from './dto/create-user';
 
 @ApiTags('users')
 @Controller('users')
@@ -18,20 +24,17 @@ export class UserController {
   ) {}
 
   @Post('samples')
+  @ApiBody({ type: CreateUserSwaggerDto })
   @ApiResponse({
     status: 201,
-    description: 'Created successfully',
+    description: '作成成功',
   })
-  @ApiBadRequestResponse({ description: 'Bad Request' })
+  @ApiBadRequestResponse({ description: 'バリデーションエラー' })
   @ApiInternalServerErrorResponse({
-    description: 'Internal Server Error',
+    description: 'サーバーエラー',
   })
+  @UsePipes(new ZodValidationPipe(CreateUserSchema))
   async sample(@Body() body: CreateUserDto): Promise<void> {
-    const result = CreateUserSchema.safeParse(body);
-    if (!result.success) {
-      // You can format the error as needed
-      throw new BadRequestException(result.error.errors);
-    }
     const command = new CreateUserCommand({
       name: body.name,
       email: body.email,

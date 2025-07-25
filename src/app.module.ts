@@ -32,11 +32,11 @@ import { UserUseCaseModule } from '~use-cases';
             headers: {
               'user-agent': req.headers['user-agent'],
               'content-type': req.headers['content-type'],
-            }
+            },
           }),
           res: (res) => ({
             statusCode: res.statusCode,
-          })
+          }),
         },
         transport: {
           target: 'pino-pretty',

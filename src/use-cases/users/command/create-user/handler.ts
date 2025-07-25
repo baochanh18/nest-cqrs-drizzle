@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { LoggerService } from '@third-party-modules/logger';
+import { LoggerService } from '@third-party-modules';
 import { InjectionToken } from '~configs';
 import { UserFactory } from '~domains/factories';
 import { UserRepository } from '~domains/repositories';
