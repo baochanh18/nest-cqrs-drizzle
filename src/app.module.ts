@@ -3,6 +3,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
+import { HTTP_STATUS_CODES } from '~configs';
 import { UserUseCaseModule } from '~use-cases';
 
 @Module({
@@ -13,9 +14,15 @@ import { UserUseCaseModule } from '~use-cases';
     LoggerModule.forRoot({
       pinoHttp: {
         customLogLevel: (req, res, err) => {
-          if (res.statusCode >= 400 && res.statusCode < 500) {
+          if (
+            res.statusCode >= HTTP_STATUS_CODES.BAD_REQUEST &&
+            res.statusCode < HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR
+          ) {
             return 'warn';
-          } else if (res.statusCode >= 500 || err) {
+          } else if (
+            res.statusCode >= HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR ||
+            err
+          ) {
             return 'error';
           }
           return 'info';
@@ -26,15 +33,19 @@ import { UserUseCaseModule } from '~use-cases';
           statusCode: res.statusCode,
         }),
         serializers: {
-          req: (req) => ({
+          req: (req: {
+            method: string;
+            url: string;
+            headers: Record<string, string>;
+          }) => ({
             method: req.method,
             url: req.url,
             headers: {
-              'user-agent': req.headers['user-agent'],
-              'content-type': req.headers['content-type'],
+              userAgent: req.headers['user-agent'],
+              contentType: req.headers['content-type'],
             },
           }),
-          res: (res) => ({
+          res: (res: { statusCode: number }) => ({
             statusCode: res.statusCode,
           }),
         },

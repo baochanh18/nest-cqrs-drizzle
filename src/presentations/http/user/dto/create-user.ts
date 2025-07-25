@@ -1,10 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { VALIDATION_RULES } from '~configs';
 import { zodJP } from '~utils';
 
 export const CreateUserSchema = zodJP.object({
-  name: zodJP.string().min(1),
+  name: zodJP.string().min(VALIDATION_RULES.MIN_NAME_LENGTH),
   email: zodJP.string().email(),
-  password: zodJP.string().min(6),
+  password: zodJP.string().min(VALIDATION_RULES.MIN_PASSWORD_LENGTH),
 });
 
 export type CreateUserDto = zodJP.infer<typeof CreateUserSchema>;

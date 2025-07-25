@@ -5,7 +5,7 @@ import { zodMessages } from '~configs';
 // Import your language translation files
 
 // lng and resources key depend on your locale.
-i18next.init({
+void i18next.init({
   lng: 'ja',
   resources: {
     ja: { zod: zodMessages },

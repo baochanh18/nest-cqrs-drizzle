@@ -1,5 +1,6 @@
 import { Global, Injectable, Module } from '@nestjs/common';
 import { PinoLogger } from 'nestjs-pino';
+import { NUMBERS } from '~configs';
 
 @Injectable()
 export class LoggerService extends PinoLogger {
@@ -12,11 +13,11 @@ export class LoggerService extends PinoLogger {
   }
 
   error(message: string, trace?: string, context?: string): void {
-    const errorObj: any = {};
+    const errorObj: Record<string, string> = {};
     if (context) errorObj.context = context;
     if (trace) errorObj.trace = trace;
 
-    if (Object.keys(errorObj).length > 0) {
+    if (Object.keys(errorObj).length > NUMBERS.ZERO) {
       super.error(errorObj, message);
     } else {
       super.error(message);
