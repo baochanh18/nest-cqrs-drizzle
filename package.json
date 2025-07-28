@@ -20,7 +20,12 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "db:generate": "npx drizzle-kit generate",
-    "db:migrate": "npx drizzle-kit migrate"
+    "db:migrate": "npx drizzle-kit migrate",
+    "db:create:test": "PG_NAME=account_test createdb account_test || echo 'Test database already exists'",
+    "db:drop:test": "PG_NAME=account_test dropdb account_test --if-exists",
+    "db:migrate:test": "PG_NAME=account_test npx drizzle-kit migrate",
+    "db:setup:test": "npm run db:create:test && npm run db:migrate:test",
+    "test:integration": "PG_NAME=account_test jest --testPathPattern='\\.integration\\.spec\\.ts$' --runInBand"
   },
   "dependencies": {
     "@fastify/swagger": "^9.5.1",

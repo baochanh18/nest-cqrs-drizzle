@@ -24,7 +24,7 @@ export class CreateUserCommandHandler
 
     const userAggregate = this.userFactory.createAggregate(payload);
 
-    await this.userCommandRepository.save({
+    await this.userCommandRepository.create({
       user: userAggregate,
     });
 

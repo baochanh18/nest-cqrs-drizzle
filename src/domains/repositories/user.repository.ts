@@ -5,7 +5,12 @@ export interface FindByIdPayload {
   transaction?: DrizzleDB;
   id: number;
 }
-export interface SavePayload {
+export interface CreatePayload {
+  transaction?: DrizzleDB;
+  user: UserAggregate;
+}
+
+export interface UpdatePayload {
   transaction?: DrizzleDB;
   user: UserAggregate;
 }
@@ -17,6 +22,7 @@ export interface DeleteByIdPayload {
 
 export interface UserRepository {
   findById: (payload: FindByIdPayload) => Promise<UserAggregate | null>;
-  save: (payload: SavePayload) => Promise<UserAggregate>;
+  create: (payload: CreatePayload) => Promise<UserAggregate>;
+  update: (payload: UpdatePayload) => Promise<UserAggregate>;
   deleteById: (payload: DeleteByIdPayload) => Promise<void>;
 }

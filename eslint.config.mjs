@@ -51,6 +51,9 @@ export default tseslint.config(
         ignoreDeclarationMerge: true,
         builtinGlobals: false 
       }],
+      '@typescript-eslint/no-unsafe-type-assertion': 'off',
+      '@typescript-eslint/init-declarations': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
     },
   },
 );

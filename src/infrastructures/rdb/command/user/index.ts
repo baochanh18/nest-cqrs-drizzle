@@ -5,9 +5,10 @@ import { DrizzleDB } from '~@types';
 import { UserAggregate } from '~domains/aggregates';
 import { UserFactory } from '~domains/factories';
 import {
+  CreatePayload,
   DeleteByIdPayload,
   FindByIdPayload,
-  SavePayload,
+  UpdatePayload,
   UserRepository,
 } from '~domains/repositories';
 import { users } from '~rdb/schema';
@@ -33,16 +34,32 @@ export class UserRepositoryImplement implements UserRepository {
     return queryResult ? this.userFactory.createAggregate(queryResult) : null;
   }
 
-  public async save(payload: SavePayload): Promise<UserAggregate> {
+  public async create(payload: CreatePayload): Promise<UserAggregate> {
     const { transaction, user } = payload;
     const db = transaction ?? this.db;
 
     const userEntity = this.userFactory.createInsertEntity(user);
 
+    const result = await db.insert(users).values(userEntity).returning();
+
+    return this.userFactory.createAggregate(result.pop() ?? {});
+  }
+
+  public async update(payload: UpdatePayload): Promise<UserAggregate> {
+    const { transaction, user } = payload;
+    const db = transaction ?? this.db;
+
+    const userEntity = this.userFactory.createInsertEntity(user);
+    const userId = user.getId();
+
+    if (userId === null || userId === undefined) {
+      throw new Error('User ID is required for update operation');
+    }
+
     const result = await db
-      .insert(users)
-      .values(userEntity)
-      .onConflictDoUpdate({ target: users.id, set: userEntity })
+      .update(users)
+      .set(userEntity)
+      .where(equal(users.id, userId))
       .returning();
 
     return this.userFactory.createAggregate(result.pop() ?? {});
