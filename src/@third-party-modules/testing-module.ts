@@ -7,10 +7,10 @@ import { LoggerModule } from 'nestjs-pino';
 import { HTTP_STATUS_CODES } from '~configs';
 import { DrizzleModule } from './drizzle';
 
-export const testingModule = (
+export const testingModule = async (
   providers: Provider[],
 ): Promise<TestingModule> => {
-  return Test.createTestingModule({
+  const module = await Test.createTestingModule({
     imports: [
       ConfigModule.forRoot({
         envFilePath: '.env.test',
@@ -71,4 +71,6 @@ export const testingModule = (
     ],
     providers,
   }).compile();
+
+  return module;
 };
