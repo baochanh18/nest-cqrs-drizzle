@@ -38,6 +38,7 @@
     "@nestjs/swagger": "^11.2.0",
     "@nestjs/throttler": "^6.4.0",
     "class-transformer": "^0.5.1",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.5.0",
     "drizzle-orm": "^0.44.2",
     "drizzle-zod": "^0.8.2",
@@ -110,7 +111,9 @@
       "^~rdb/schema$": "<rootDir>/infrastructures/rdb/schemas/index.ts",
       "^~rdb/command$": "<rootDir>/infrastructures/rdb/command/index.ts",
       "^~presentations/(.*)": "<rootDir>/presentations/$1",
-      "^~use-cases/(.*)": "<rootDir>/use-cases/$1"
+      "^~use-cases/(.*)": "<rootDir>/use-cases/$1",
+      "^~exceptions$": "<rootDir>/exceptions/index.ts",
+      "^~interceptors$": "<rootDir>/interceptors/index.ts"
     }
   }
 }

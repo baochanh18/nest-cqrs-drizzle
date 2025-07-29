@@ -1,15 +1,21 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { CqrsModule } from '@nestjs/cqrs';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
+import {
+  LoggerModule as CustomLoggerModule,
+  DateTimeModule,
+} from '~@third-party-modules';
 import { HTTP_STATUS_CODES } from '~configs';
+import { ErrorInterceptor } from '~interceptors';
 import { UserUseCaseModule } from '~use-cases';
 
 @Module({
   imports: [
     CqrsModule,
-    LoggerModule,
+    DateTimeModule,
+    CustomLoggerModule,
     UserUseCaseModule,
     LoggerModule.forRoot({
       pinoHttp: {
@@ -67,6 +73,10 @@ import { UserUseCaseModule } from '~use-cases';
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ErrorInterceptor,
     },
   ],
 })

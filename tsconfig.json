@@ -29,7 +29,9 @@
       "~rdb/schema": ["infrastructures/rdb/schemas/index"],
       "~rdb/command": ["infrastructures/rdb/command/index"],
       "~presentations/http": ["presentations/http/index"],
-      "~use-cases": ["use-cases/index"]
+      "~use-cases": ["use-cases/index"],
+      "~exceptions": ["exceptions/index"],
+      "~interceptors": ["interceptors/index"],
     }
   }
 }
