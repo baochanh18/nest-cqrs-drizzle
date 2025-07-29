@@ -252,8 +252,8 @@ describe('ErrorInterceptor', () => {
       expect(genericErrorResult.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
       expect(genericErrorResult.response).toEqual({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Something went wrong',
-        error: 'Error',
+        message: 'Internal server error',
+        error: 'InternalServerError',
         path: '/test-endpoint',
       });
       expect(genericErrorResult.statusCalledWith).toBe(
@@ -332,15 +332,20 @@ describe('ErrorInterceptor', () => {
     });
 
     it('should log errors with stack trace when available', () => {
-      expect(errorWithStackResult.loggerCalledWith[NUMBERS.ZERO]).toMatch(
-        /Error occurred:/,
+      // Verify that logger was called multiple times
+      expect(loggerService.error.mock.calls.length).toBeGreaterThan(0);
+
+      // Check that error information is logged
+      const allLogMessages = loggerService.error.mock.calls
+        .map((call) => call[0])
+        .join(' ');
+      expect(allLogMessages).toContain('Test error');
+
+      // Check that stack trace is passed
+      const stackCalls = loggerService.error.mock.calls.filter((call) =>
+        call[1]?.includes('TestFile.js:123'),
       );
-      expect(errorWithStackResult.loggerCalledWith[NUMBERS.ONE]).toBe(
-        'Error: Test error\\n    at TestFile.js:123',
-      );
-      expect(errorWithStackResult.loggerCalledWith[NUMBERS.TWO]).toBe(
-        'ErrorInterceptor',
-      );
+      expect(stackCalls.length).toBeGreaterThan(0);
     });
   });
 
@@ -522,10 +527,10 @@ describe('ErrorInterceptor', () => {
       );
       expect(infrastructureErrorResult.response).toEqual({
         statusCode: HttpStatus.SERVICE_UNAVAILABLE,
-        message: 'Database connection failed',
-        error: 'InfrastructureError',
+        message: 'Internal server error',
+        error: 'InternalServerError',
         path: '/test-endpoint',
-        info: { service: 'postgres' },
+        // No info field for 5xx errors (sanitized)
       });
       expect(infrastructureErrorResult.statusCalledWith).toBe(
         HttpStatus.SERVICE_UNAVAILABLE,

@@ -1,5 +1,5 @@
 import { Global, Injectable, Module } from '@nestjs/common';
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 const JST_OFFSET_HOURS = 9; // Japan Standard Time is UTC+9
 
