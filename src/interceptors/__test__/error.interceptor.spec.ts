@@ -307,7 +307,7 @@ describe('ErrorInterceptor', () => {
   });
 
   describe('error logging with stack trace', () => {
-    let errorWithStackResult: any;
+    let _errorWithStackResult: any;
 
     beforeAll(async () => {
       jest.clearAllMocks();
@@ -322,7 +322,7 @@ describe('ErrorInterceptor', () => {
       await new Promise<void>((resolve) => {
         interceptor.intercept(mockExecutionContext, mockCallHandler).subscribe({
           error: () => {
-            errorWithStackResult = {
+            _errorWithStackResult = {
               loggerCalledWith: loggerService.error.mock.calls[NUMBERS.ZERO],
             };
             resolve();
@@ -333,19 +333,21 @@ describe('ErrorInterceptor', () => {
 
     it('should log errors with stack trace when available', () => {
       // Verify that logger was called multiple times
-      expect(loggerService.error.mock.calls.length).toBeGreaterThan(0);
+      expect(loggerService.error.mock.calls.length).toBeGreaterThan(
+        NUMBERS.ZERO,
+      );
 
       // Check that error information is logged
       const allLogMessages = loggerService.error.mock.calls
-        .map((call) => call[0])
+        .map((call) => call[NUMBERS.ZERO] as string)
         .join(' ');
       expect(allLogMessages).toContain('Test error');
 
       // Check that stack trace is passed
       const stackCalls = loggerService.error.mock.calls.filter((call) =>
-        call[1]?.includes('TestFile.js:123'),
+        (call[NUMBERS.ONE] as string).includes('TestFile.js:123'),
       );
-      expect(stackCalls.length).toBeGreaterThan(0);
+      expect(stackCalls.length).toBeGreaterThan(NUMBERS.ZERO);
     });
   });
 

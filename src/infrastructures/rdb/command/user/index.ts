@@ -21,10 +21,9 @@ export class UserRepositoryImplement implements UserRepository {
   public async findById(
     payload: FindByIdPayload,
   ): Promise<UserAggregate | null> {
-    const { transaction, id } = payload;
-    const db = transaction ?? this.db;
+    const { id } = payload;
 
-    const queryResult = await db.query.users.findFirst({
+    const queryResult = await this.db.query.users.findFirst({
       where: (user, { eq }) => eq(user.id, id),
       with: {
         posts: true,
@@ -35,19 +34,17 @@ export class UserRepositoryImplement implements UserRepository {
   }
 
   public async create(payload: CreatePayload): Promise<UserAggregate> {
-    const { transaction, user } = payload;
-    const db = transaction ?? this.db;
+    const { user } = payload;
 
     const userEntity = this.userFactory.createInsertEntity(user);
 
-    const result = await db.insert(users).values(userEntity).returning();
+    const result = await this.db.insert(users).values(userEntity).returning();
 
     return this.userFactory.createAggregate(result.pop() ?? {});
   }
 
   public async update(payload: UpdatePayload): Promise<UserAggregate> {
-    const { transaction, user } = payload;
-    const db = transaction ?? this.db;
+    const { user } = payload;
 
     const userEntity = this.userFactory.createInsertEntity(user);
     const userId = user.getId();
@@ -56,7 +53,7 @@ export class UserRepositoryImplement implements UserRepository {
       throw new Error('User ID is required for update operation');
     }
 
-    const result = await db
+    const result = await this.db
       .update(users)
       .set(userEntity)
       .where(equal(users.id, userId))
@@ -66,13 +63,12 @@ export class UserRepositoryImplement implements UserRepository {
   }
 
   public async deleteById(payload: DeleteByIdPayload): Promise<void> {
-    const { transaction, user } = payload;
-    const db = transaction ?? this.db;
+    const { user } = payload;
 
     const userId = user.getId();
     if (userId === null || userId === undefined || Number.isNaN(userId)) {
       throw new Error('User id is required for deletion');
     }
-    await db.delete(users).where(equal(users.id, userId));
+    await this.db.delete(users).where(equal(users.id, userId));
   }
 }

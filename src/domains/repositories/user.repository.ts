@@ -1,22 +1,17 @@
-import type { DrizzleDB } from '~@types';
 import type { UserAggregate } from '~domains/aggregates';
 
 export interface FindByIdPayload {
-  transaction?: DrizzleDB;
   id: number;
 }
 export interface CreatePayload {
-  transaction?: DrizzleDB;
   user: UserAggregate;
 }
 
 export interface UpdatePayload {
-  transaction?: DrizzleDB;
   user: UserAggregate;
 }
 
 export interface DeleteByIdPayload {
-  transaction?: DrizzleDB;
   user: UserAggregate;
 }
 

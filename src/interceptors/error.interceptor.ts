@@ -36,7 +36,11 @@ export class ErrorInterceptor implements NestInterceptor {
         const clientResponse = this.createClientResponse(parsedError, url);
         const detailedResponse = this.createDetailedResponse(parsedError, url);
 
-        this.logError(error, parsedError, detailedResponse, clientResponse);
+        this.logError(error, {
+          parsed: parsedError,
+          detailed: detailedResponse,
+          client: clientResponse,
+        });
 
         response.status(parsedError.status);
         return throwError(
@@ -97,12 +101,14 @@ export class ErrorInterceptor implements NestInterceptor {
 
     // Sanitize response for client (no sensitive details for 5xx errors)
     const SERVER_ERROR_THRESHOLD = 500;
-    const sanitizedMessage = status >= SERVER_ERROR_THRESHOLD ? 'Internal server error' : message;
+    const sanitizedMessage =
+      status >= SERVER_ERROR_THRESHOLD ? 'Internal server error' : message;
 
     return {
       statusCode: status,
       message: sanitizedMessage,
-      error: status >= SERVER_ERROR_THRESHOLD ? 'InternalServerError' : errorName,
+      error:
+        status >= SERVER_ERROR_THRESHOLD ? 'InternalServerError' : errorName,
       path,
       // Don't include 'info' for 5xx errors to avoid exposing sensitive data
       ...(status < SERVER_ERROR_THRESHOLD && info && { info }),
@@ -169,7 +175,9 @@ export class ErrorInterceptor implements NestInterceptor {
       }
 
       const MIN_CONTEXT_LENGTH = 0;
-      return Object.keys(context).length > MIN_CONTEXT_LENGTH ? context : undefined;
+      return Object.keys(context).length > MIN_CONTEXT_LENGTH
+        ? context
+        : undefined;
     }
 
     return undefined;
@@ -177,9 +185,11 @@ export class ErrorInterceptor implements NestInterceptor {
 
   private logError(
     originalError: unknown,
-    parsedError: ReturnType<typeof this.parseError>,
-    detailedResponse: ErrorResponse,
-    clientResponse: ErrorResponse,
+    responses: {
+      parsed: ReturnType<typeof this.parseError>;
+      detailed: ErrorResponse;
+      client: ErrorResponse;
+    },
   ): void {
     const rootCause = this.getRootCause(originalError);
     const errorContext = this.getErrorContext(originalError);
@@ -187,14 +197,14 @@ export class ErrorInterceptor implements NestInterceptor {
     // Single comprehensive log with all relevant information
     const logData = {
       rootCause,
-      detailed: detailedResponse,
-      client: clientResponse,
+      detailed: responses.detailed,
+      client: responses.client,
       ...(errorContext && { context: errorContext }),
     };
 
     this.logger.error(
       `${rootCause} | ${JSON.stringify(logData)}`,
-      parsedError.stack,
+      responses.parsed.stack,
       'ErrorInterceptor',
     );
   }
