@@ -25,7 +25,7 @@ export function Transactional() {
         args,
       ): Promise<unknown> => {
         // Get the injected Drizzle instance
-        const db = thisArg.db;
+        const { db } = thisArg;
         if (!db) {
           throw new Error(
             'DrizzleDB instance is not available for transaction.',

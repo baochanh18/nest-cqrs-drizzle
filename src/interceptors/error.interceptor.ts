@@ -18,6 +18,13 @@ interface ErrorResponse {
   path: string;
   info?: Record<string, unknown>;
 }
+interface ErrorContext {
+  status: number;
+  message: string | string[];
+  errorName: string;
+  info?: Record<string, unknown> | undefined;
+  stack?: string;
+}
 
 @Injectable()
 export class ErrorInterceptor implements NestInterceptor {
@@ -186,7 +193,7 @@ export class ErrorInterceptor implements NestInterceptor {
   private logError(
     originalError: unknown,
     responses: {
-      parsed: ReturnType<typeof this.parseError>;
+      parsed: ErrorContext;
       detailed: ErrorResponse;
       client: ErrorResponse;
     },
