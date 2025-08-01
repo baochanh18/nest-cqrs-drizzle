@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UsePipes } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   ApiBadRequestResponse,
@@ -8,12 +8,15 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ZodValidationPipe } from '@third-party-modules';
-import { CreateUserCommand } from '~use-cases';
+import { DEFAULT_PAGE, DEFAULT_PAGE_LIMIT } from '~configs';
+import { CreateUserCommand, GetAllUsersQuery } from '~use-cases';
 import {
   CreateUserDto,
   CreateUserSchema,
   CreateUserSwaggerDto,
-} from './dto/create-user';
+} from './request-dto/create-user';
+import { GetAllUsersQueryDto } from './request-dto/get-all-users-query';
+import { GetAllUserResponseDto } from './response-dto/get-all-users';
 
 @ApiTags('users')
 @Controller('users')
@@ -41,5 +44,23 @@ export class UserController {
       password: body.password,
     });
     await this.commandBus.execute(command);
+  }
+
+  @Get('all')
+  @ApiResponse({
+    status: 200,
+    description: 'Get all users with pagination',
+    type: [GetAllUserResponseDto],
+  })
+  async getAllUsers(
+    @Query() queryParams: GetAllUsersQueryDto,
+  ): Promise<GetAllUserResponseDto[]> {
+    const {
+      page = DEFAULT_PAGE.toString(),
+      limit = DEFAULT_PAGE_LIMIT.toString(),
+    } = queryParams;
+
+    const query = new GetAllUsersQuery(parseInt(page, 10), parseInt(limit, 10));
+    return this.queryBus.execute(query);
   }
 }

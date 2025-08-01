@@ -24,6 +24,7 @@
       "~domains/aggregates": ["domains/aggregates/index"],
       "~domains/repositories": ["domains/repositories/index"],
       "~domains/factories": ["domains/factories/index"],
+      "~domains/queries": ["domains/queries/index"],
       "~utils": ["utils/index"],
       "~middlewares": ["middlewares/index"],
       "~rdb/schema": ["infrastructures/rdb/schemas/index"],

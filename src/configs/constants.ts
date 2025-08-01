@@ -10,17 +10,27 @@ export const HTTP_STATUS_CODES = {
   UNPROCESSABLE_ENTITY: 422,
   INTERNAL_SERVER_ERROR: 500,
   SERVICE_UNAVAILABLE: 503,
-} as const;
+};
 
 export const VALIDATION_RULES = {
   MIN_NAME_LENGTH: 1,
   MIN_PASSWORD_LENGTH: 6,
   DEFAULT_PAGE_SIZE: 20,
   MAX_PAGE_SIZE: 100,
-} as const;
+};
 
 export const NUMBERS = {
   ZERO: 0,
   ONE: 1,
   TWO: 2,
-} as const;
+  THREE: 3,
+  FOUR: 4,
+  FIVE: 5,
+  SIX: 6,
+  EIGHT: 8,
+  TEN: 10,
+  TWENTY: 20,
+};
+
+export const DEFAULT_PAGE_LIMIT = 10;
+export const DEFAULT_PAGE = 1;

@@ -7,12 +7,9 @@ import {
   UserInsertEntity,
   userInsertSchema,
 } from '~rdb/schema';
-import { IBaseFactory } from './base.factory';
 
 @Injectable()
-export class UserFactory
-  implements IBaseFactory<UserAggregate, UserInsertEntity>
-{
+export class UserFactory {
   @Inject(EventPublisher) private readonly eventPublisher: EventPublisher;
 
   public createAggregate(
