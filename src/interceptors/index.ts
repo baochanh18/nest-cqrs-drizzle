@@ -1,1 +1,2 @@
-export * from './error.interceptor';
+export * from './error';
+export * from './timeout';

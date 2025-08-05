@@ -15,7 +15,7 @@ import {
   PresentationError,
   UseCaseError,
 } from '~exceptions';
-import { ErrorInterceptor } from '../error.interceptor';
+import { ErrorInterceptor } from '..';
 
 describe('ErrorInterceptor', () => {
   let interceptor: ErrorInterceptor;

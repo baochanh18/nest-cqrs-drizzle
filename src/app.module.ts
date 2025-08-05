@@ -6,9 +6,10 @@ import { LoggerModule } from 'nestjs-pino';
 import {
   LoggerModule as CustomLoggerModule,
   DateTimeModule,
+  LoggerService,
 } from '~@third-party-modules';
 import { HTTP_STATUS_CODES } from '~configs';
-import { ErrorInterceptor } from '~interceptors';
+import { ErrorInterceptor, TimeoutInterceptor } from '~interceptors';
 import { UserUseCaseModule } from '~use-cases';
 
 @Module({
@@ -77,6 +78,16 @@ import { UserUseCaseModule } from '~use-cases';
     {
       provide: APP_INTERCEPTOR,
       useClass: ErrorInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useFactory: (logger: LoggerService): TimeoutInterceptor => {
+        return new TimeoutInterceptor(logger, {
+          defaultTimeoutMs: 30000, // 30 seconds
+          maxTimeoutMs: 300000, // 5 minutes
+        });
+      },
+      inject: [LoggerService],
     },
   ],
 })
